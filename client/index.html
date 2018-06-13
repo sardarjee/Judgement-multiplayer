@@ -1,263 +1,140 @@
-Enter Your Name : <input id="name" type="text" name="res" value="Rohit">
-Enter Game ID : <input id="gameID" type="text" name="res" value="Rohit"><br>
-<button onclick="App.CreateGame()">Create a Game</button>
-<button onclick="App.JoinGame()">Join Game</button><br>
-<textarea id="log" rows="4" cols="50">
-</textarea>
-<textarea id="Players" rows="4" cols="50">
-</textarea>
-<br>
-<button onclick="App.StartGame()">Start Game</button><br>
-<textarea id="trump" rows="1" cols"10"></textarea><br>
-Enter Claim: <input id="claim" typr="text" name="res" value="0">
-<button onclick="App.SendClaim()">Confirm Claim</button><br>
-Enter Response Rank: <input id="responseRank" typr="text" name="res" value="">
-Enter Response Suit: <input id="responseSuit" typr="text" name="res" value="">
-<button onclick="App.SendResponse()">Confirm Response</button><br>
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script src="client/libs/jquery-3.2.1.min.js"></script>
-<script src="client/js/Judgement.js" type="text/javascript"></script>
-<script src="client/js/Player.js" type="text/javascript"></script>
-<script src="client/js/Scoreboard.js" type="text/javascript"></script>
-<script src="client/js/Hand.js" type="text/javascript"></script>
-<script src="client/js/Deck.js" type="text/javascript"></script>
-<script src="client/js/Card.js" type="text/javascript"></script>
+<!DOCTYPE html>
+<html lng="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="client/libs/jquery-3.2.1.min.js"></script>
+  <script src="client/js/Judgement.js" type="text/javascript"></script>
+  <script src="client/js/Player.js" type="text/javascript"></script>
+  <script src="client/js/Scoreboard.js" type="text/javascript"></script>
+  <script src="client/js/Hand.js" type="text/javascript"></script>
+  <script src="client/js/Deck.js" type="text/javascript"></script>
+  <script src="client/js/Card.js" type="text/javascript"></script>
+  <script src="client/js/brain.js" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Ubuntu+Condensed" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Unicase" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="client/css/main.css">
+
+</head>
+<body>
+
+
+
+  <div id="topbar">
+    <div class='inputs'>
+
+      <div class="block">
+        Enter Name: <input type="text" id="name" class="input-res" value="Rohit" required>
+        <button id="crtbtn"onclick="App.CreateGame()" style="width:98%;">Create a Game</button>
+        <input type="text" id="gameID" class="input-res" value="Enter Game ID">
+        <button id="joinbtn"onclick="App.JoinGame()" style="width:35%;">Join Game</button>
+      </div>
+
+
+      <div class="block">
+        <table id="claimTable">
+          <tr>
+            <th>Players</th>
+            <th>Claim</th>
+            <th>Hands</th>
+          </tr>
+        </table>
+      </div>
+
+      <div class="block">
+      Enter Claim: <input id="claim" class="input-res" name="res" value="0">
+      <button onclick="App.SendClaim()" style="width:98%;">Confirm Claim</button>
+      </div>
+
+
+    </div>
+
+    <div class='center'>
+      <div class="block">
+              <span id="mainTitle">Judgement</span><br>
+      <button id="startGame" onclick="App.StartGame()">Start Game</button>
+      <button id="myBtn">Scoreboard</button><br>
+
+    </div>
+    <div class="block">
+      <span id="trump" style="display:none"><span><br>
+    </div>
+    <div class="block">
+      <span id="msgbox">Welcome to Judgement</span>
+    </div>
+  </div>
+
+    <div class='logss'>
+      <textarea id="log" rows="4" cols="30"></textarea>
+      <textarea id="Players" rows="4" cols="30"></textarea><br>
+    </div>
+
+
+  </div>
+  <div id="container">
+
+  <div id="pot">
+  </div>
+
+  <div id="deck">
+    <div id="overlay">
+    </div>
+  </div>
+</div>
+  <div id="status">
+      <label id="gameNo">Game Number : 0 </label>
+      <label id="roundNo">Round Number : 0 </label>
+  </div>
+
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <h1>Scoreboard</h1>
+<table class="rwd-table">
+<tr>
+  <th>Let</th>
+  <th>The</th>
+  <th>Game</th>
+  <th>Begin</th>
+</tr>
+</table>
+</div>
+</div>
+</body>
+<script src="client/js/jqueryfunc.js" type="text/javascript"></script>
 <script>
+// Get the modal
+var modal = document.getElementById('myModal');
 
-var IO = function(){
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
 
-  this.init= function () {
-    socket.on('connected',function (data) {
-            console.log(data.message);
-    })
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
 
-    socket.on('showTrump',function (data) {
-      var temp=""
-      if(data.trump=='0')
-        temp="CLUBS"
-        else if (data.trump=='1')
-          temp="DIAMONDS"
-          else if(data.trump=='2')
-            temp="SPADES"
-              else if(data.trump=='3')
-                temp="HEARTS"
-      document.getElementById('trump').value=temp
-    })
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
 
-    socket.on('playerClaim',function (data) {
-      if(game.turn != game.dealer){
-        game.claim[game.turn]=parseInt(data.claimValue)
-        console.log("claimValue:"+game.turn+"is"+data.claimValue);
-        game.turn=(game.turn+1)%Judgement.players.length;
-        Judgement.players[game.turn].getClaim()
-    }else{
-      var Sum=game.claimSum()
-      if(Sum+parseInt(data.claimValue)==game.gameNo)
-        Judgement.players[game.turn].getClaim()
-      else {
-        game.claim[game.turn]=parseInt(data.claimValue)
-        console.log("claimValue:"+game.turn+"is"+data.claimValue);
-        game.turn=(game.turn+1)%Judgement.players.length;
-        App.startRounds()
-      }
-    }
-    })
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
 
-    socket.on('Response', function (data) {
-      console.log("playerResponse"+game.turn+"is"+data.resValue);
-      app.playResponse(data);
-    })
-
-    socket.on('getClaim',function (data) {
-      document.getElementById("log").value+="Enter Claim For Your Cards";
-      app.hostId=data.hostId
-    })
-
-    socket.on('getResponse',function (data) {
-      document.getElementById("log").value+="Enter Your Response";
-      //app.hostId=data.hostId
-    })
-
-    socket.on('showScore',function (data) {
-      console.log(data.score);
-    })
-
-    socket.on('showCards',function (data) {
-      //setInterval(function () {
-        App.showCards(data)
-        console.log("on showCards");
-      //}, 1000)
-    })
-
-    socket.on('newGameCreated',function (data) {
-      app.hostGameinit(data)
-      setInterval(function(){
-        socket.emit('activePlayers',{gameId:app.gameId,players:app.players})
-      }, 1000);
-    })
-
-    socket.on('playerJoinedRoom',function (data) {
-      app.players.push(data)
-      app.numberofPlayers+=1
-      document.getElementById("log").value+="\nPlayer "+data.playerName+" joined the room"
-
-    })
-
-    socket.on('showActivePlayers',function (data) {
-      document.getElementById("Players").value=""
-      app.players=data.players;
-      for(var i in data.players)
-        document.getElementById("Players").value+="\n"+data.players[i].playerName
-    })
-
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";
   }
-
 }
-
-
-
-var App = function () {
-  this.name=""
-  this.myRole=""
-  this.gameid=0;
-  this.socketid=0;
-  this.numberofPlayers=0;
-  this.players=[]
-  this.hostId=0
-
-  this.init=function () {
-
-  }
-
-  this.hostGameinit= function (data) {
-    this.myRole="host";
-    this.gameId=data.gameId;
-    this.socketid=data.mySocketId;
-    this.numberofPlayers=1;
-
-    document.getElementById("log").value+=" GameID "+data.gameId
-
-  }
-
-  this.playResponse = function (data) {
-    var res = Judgement.players[game.turn].play(data.resValue);
-
-    if(game.turn==game.startplayer){
-      game.lsuit=res.suit.string;
-      game.round.splice(0,0,[res,Judgement.players[game.turn].playerNum])
-    }else
-      if(res.suit.string==game.lsuit)
-        game.round.splice(0,0,[res,Judgement.players[game.turn].playerNum])
-      else
-        if(Judgement.players[game.turn].hand.hasCardofSuit(game.lsuit)){
-          console.log("play the right move!");
-          Judgement.players[game.turn].hand.addCard(res)
-          console.log(Judgement.players[game.turn].name);
-          console.log(Judgement.players[game.turn].hand);
-          Judgement.players[game.turn].getResponse();
-          return
-        }else{
-          game.round.splice(0,0,[res,Judgement.players[game.turn].playerNum])
-        }
-
-    // game.round[game.turn]=data.resValue
-    game.turn=(game.turn+1)%Judgement.players.length;
-    Judgement.players[game.turn].getResponse();
-
-    if(game.round.length==Judgement.players.length){
-      game.getWinner();
-    }
-  }
-
-}
-
-var socket = io();
-var socIO = new IO();
-var app = new App();
-var game = new Judgement();
-socIO.init();
-app.init();
-//var game = require('./js/Judgement');
-App.CreateGame= function () {
-  app.name=document.getElementById("name").value;
-  app.players.push({gameId:app.gameId,playerName:app.name,mySocketId:socket.id})
-  socket.emit("hostCreateNewGame");
-  console.log("inside App.CreateGame");
-}
-
-App.startRounds = function () {
-  game.newRound()
-}
-
-App.JoinGame = function () {
-  socket.emit("playerJoinGame",{gameId:document.getElementById("gameID").value,mySocketId:socket.id,playerName:document.getElementById("name").value});
-  console.log("inside App.JoinGame");
-}
-
-App.StartGame = function () {
-  game.Addplayers(app.players)
-  game.startGame()
-  console.log('inside App.StartGame');
-}
-
-App.showCards = function (data) {
-  var temp = new Hand();
-  temp.hand=data.hand
-  document.getElementById("log").value+=temp.showHand()
-  //document.getElementById("trump").value=
-  console.log(temp.showHand())
-
-}
-
-App.SendClaim = function () {
-  var claim= document.getElementById("claim").value
-  socket.emit('playerClaim',{hostId:app.hostId,claimValue:claim,socketId:socket.id})
-
-}
-
-App.SendResponse = function () {
-  var res={}
-  res["rank"]=document.getElementById("responseRank").value
-  res["suit"]=document.getElementById("responseSuit").value
-  socket.emit('playerResponse',{hostId:app.hostId,resValue:res,socketId:socket.id})
-}
-
-
-/*  var socket = io();
-
-  var sendName = function() {
-    socket.emit('sendName',{
-      name:document.getElementById("text").value
-    });
-  };
-
-  var ready = function () {
-    socket.emit('ready',{
-    });
-  }
-  var response = function () {
-    socket.emit('response',{
-      rank:document.getElementById("rank").value,
-      suit:document.getElementById("suit").value,
-    });
-    console.log(document.getElementById("response").value);
-  }
-
-  socket.on('req',function (data) {
-    document.getElementById("log").value+="Its Your Turn Play!!!!"
-  })
-
-  socket.on('hand',function(data) {
-    document.getElementById("hand").value=data.hand
-  })
-
-  socket.on('players',function (names) {
-    document.getElementById("log").value="";
-    for(var i in names.name){
-      document.getElementById("log").value+="Player :"+names.name[i];
-      console.log(names.name[i]+"\n");
-    }
-  }
-);
-*/
 </script>
+</html>

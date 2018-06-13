@@ -6,8 +6,10 @@ function Judgement() {
  //self.players = [Player("Danny",0), Player("Desmond",1)]
  this.score = new Scoreboard()
  this.trump = Math.floor(Math.random() * Math.floor(4))
- this.NumGames = 1//52/len(self.players)
- this.gameNo = 1//NumGames
+ this.NumGames = 2//52/len(self.players)
+ this.gameNo = 2//NumGames
+ this.round = []
+ this.lsuit = ""
 
  this.Addplayers = function(data){
    for (var i in data){
@@ -36,6 +38,7 @@ function Judgement() {
  this.deck = new Deck()
  this.deck.shuffle()
  this.dealer = (this.dealer + 1) % Judgement.players.length
+ this.dealer = (this.dealer + 1) % Judgement.players.length
  this.dealCards()
  this.showTrump()
  this.showScore()
@@ -43,11 +46,14 @@ function Judgement() {
  this.gamescore=[]
  for(var i =0;i<Judgement.players.length;i++)
     this.gamescore.push(0);
- this.startplayer=this.dealer+1
+ this.startplayer=(this.dealer+1)%Judgement.players.length
  this.claim = []
  this.turn=this.startplayer;
+ socket.emit('displayPlayers',{gameId:app.gameId,players:Judgement.players})
+ socket.emit('hostBroadcastGameNum',{gameId:app.gameId,gameNo:this.gameNo});
  this.getClaim()
  this.roundCount=0
+
 
 
  // for(var i=0;i<this.gameNo;i++){
@@ -75,6 +81,7 @@ function Judgement() {
  }
 
  this.showCards = function () {
+
    for(var v in Judgement.players){
       socket.emit("hostShowCards",{gameId:app.gameId,socketId:Judgement.players[v].id,hand:Judgement.players[v].hand.hand,trump:this.trump})
    }
@@ -103,11 +110,12 @@ function Judgement() {
 
  this.getClaim = function() {
    for(var i in Judgement.players)
-           this.claim.push(0);
+           this.claim.push(-1);
+
    // for(var i=1;i<Judgement.players.length+1;i++)
    //     claim[(this.dealer + i) % Judgement.players.length] = 0//Judgement.players[(this.dealer + i) % Judgement.players.length].getClaim()//Socket get claim//raw_input("Enter Cliam for "+str(self.players[(self.dealer + i) % len(self.players)].name)+str((self.dealer + i) % len(self.players))+" ")
    // return claim
-   this.turn=(this.dealer + 1) % Judgement.players.length
+   //this.turn=(this.dealer + 1) % Judgement.players.length
    Judgement.players[this.turn].getClaim()
  }
 
@@ -119,9 +127,10 @@ function Judgement() {
     return temp
    }
 
- this.newRound= async function() {
+ this.newRound=  function() {
    this.round = []
    this.lsuit = ""
+   socket.emit('hostBroadcastRoundNum',{gameId:app.gameId,roundNo:this.roundCount+1});
    Judgement.players[(this.startplayer) % Judgement.players.length].getResponse();
 }
  //   for(var i=0;i<Judgement.players.length;i++){
@@ -163,31 +172,46 @@ function Judgement() {
  // }
  //
  this.getWinner = function () {
-
-    var win = this.round[Judgement.players.length-1]
+   console.log("Inside Get Winner:"+this.lsuit);
+   for(var i in this.round)
+   {
+     console.log(this.round[i][1]+this.round[i][0].rank.str+this.round[i][0].suit.str);
+   }
+    var win = this.round[parseInt(this.startplayer)]
+    console.log("win "+win[1]+this.startplayer);
     var tflag=0
-    if(win[0].suit.iden==this.trump)
+    if(parseInt(win[0].suit.id)==this.trump){
         tflag=1
+        console.log("at 177");
+      }
     for(var card in this.round){
-        if(this.round[card][0].suit.iden==this.trump){
+        if(parseInt(this.round[card][0].suit.id)==this.trump){
+            console.log("at181");
             if(tflag==1){
-                if(this.round[card][0]>win[0])
-                    win=card
+                console.log("at183");
+                if(parseInt(this.round[card][0].rank.rank)>parseInt(win[0].rank.rank))
+                    win=this.round[card]
                 else
                     continue
             }
             else{
+              console.log("at190");
                 tflag=1
                 win=this.round[card]
             }
         }
         else{
+            console.log("at196");
             if(tflag==1)
                 continue
             else{
-                if(this.round[card][0].suit.string==this.lsuit){
-                    if(this.round[card][0]>win[0])
-                        win=card
+                console.log("at200");
+                if(this.round[card][0].suit.str==this.lsuit){
+                  console.log("at202"+parseInt(this.round[card][0].rank.rank)+parseInt(win[0].rank.rank));
+                    if(parseInt(this.round[card][0].rank.rank)>parseInt(win[0].rank.rank)){
+                        win=this.round[card]
+                        console.log("at205"+win[1]);
+                    }
                     else
                         continue
                   }
@@ -197,6 +221,7 @@ function Judgement() {
           }
     }
     console.log("Player "+String(win[1])+" won the hand!");
+    socket.emit('hostBroadcastPlayerHandWon',{gameId:app.gameId,name:Judgement.players[parseInt(win[1])].name,playerNum:String(win[1])})
     this.startplayer=win[1]
     this.lsuit=""
     this.round=[]
@@ -212,8 +237,14 @@ function Judgement() {
       else {
 
           this.UpdateScoreboard()
+          this.dealer=(this.dealer+1)%Judgement.players.length
+          this.showScore()
+          //game.turn=(game.dealer+1)%Judgement.players.length
+          //this.getClaim();
           this.newGame();
         }
+    }else{
+      this.newRound()
     }
 
  }
@@ -232,7 +263,10 @@ function Judgement() {
  }
 
  this.showWinner = function() {
-   console.log("Winner is "+String(Judgement.players[this.score.displayWinner()].name));
+   console.log(this.score.score);
+   console.log("Winner is "+parseInt(this.score.displayWinner()));
+   console.log("Winner is "+String(Judgement.players[parseInt(this.score.displayWinner())].name));
+   socket.emit('hostBroadcastMatchWinner',{gameId:app.gameId,playerNum:this.score.displayWinner(),name:String(Judgement.players[parseInt(this.score.displayWinner())].name)})
  }
 
 }

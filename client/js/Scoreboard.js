@@ -1,8 +1,11 @@
 function Scoreboard(){
   this.score = []
 
-  for(var i in Player.list)
-    this.score.push(0);
+  this.initScore= function () {
+    this.score = []
+    for(var i in Judgement.players)
+      this.score.push(0);
+  }
 
   this.showScore = function() {
     console.log(this.score);

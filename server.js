@@ -9,7 +9,7 @@ app.get('/',function(req, res) {
 //app.get('/js/Judgement')
 app.use('/client',express.static(__dirname + '/client'));
 
-serv.listen(2000);
+serv.listen(80, '0.0.0.0');
 console.log("Server started.");
 
 var io = require('socket.io')(serv,{});

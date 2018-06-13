@@ -15,7 +15,13 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostShowScore', hostShowScore);
     gameSocket.on('hostGetClaim', hostGetClaim);
     gameSocket.on('hostGetResponse', hostGetResponse);
-
+    gameSocket.on('hostBroadcastPlayerClaim',hostBroadcastPlayerClaim)
+    gameSocket.on('hostBroadcastPlayerResponse',hostBroadcastPlayerResponse)
+    gameSocket.on('displayPlayers',displayPlayers)
+    gameSocket.on('hostBroadcastPlayerHandWon',hostBroadcastPlayerHandWon)
+    gameSocket.on("hostBroadcastGameNum",hostBroadcastGameNum);
+    gameSocket.on('hostBroadcastRoundNum',hostBroadcastRoundNum);
+    gameSocket.on('hostBroadcastMatchWinner',hostBroadcastMatchWinner);
     //gameSocket.on('hostRoomFull', hostPrepareGame);
     //gameSocket.on('hostCountdownFinished', hostStartGame);
     //gameSocket.on('hostNextRound', hostNextRound);
@@ -27,7 +33,37 @@ exports.initGame = function(sio, socket){
     //gameSocket.on('playerAnswer', playerAnswer);
     //gameSocket.on('playerRestart', playerRestart);
 }
+function hostBroadcastMatchWinner(data) {
+  console.log("inside hostBroadcastMatchWinner");
+  io.sockets.in(data.gameId).emit('BroadcastMatchWinner',data)
+}
 
+function hostBroadcastRoundNum(data) {
+  console.log("inside hostBroadcastRoundNum");
+  io.sockets.in(data.gameId).emit('BroadcastRoundNum',data)
+}
+
+function hostBroadcastGameNum(data) {
+  console.log("inside hostBroadcastGameNum");
+  io.sockets.in(data.gameId).emit('BroadcastGameNum',data)
+}
+
+function hostBroadcastPlayerHandWon(data) {
+  console.log("inside hostBroadcastPlayerHandWon");
+  io.sockets.in(data.gameId).emit('BroadcastPlayerHandWon',data)
+}
+function displayPlayers(data) {
+    io.sockets.in(data.gameId).emit('DisplayPlayers',data)
+}
+
+function hostBroadcastPlayerResponse(data) {
+  io.sockets.in(data.gameId).emit('BroadcastPlayerResponse',data)
+  console.log("inside hostBroadcastPlayerResponse");
+}
+function hostBroadcastPlayerClaim(data) {
+  io.sockets.in(data.gameId).emit('BroadcastPlayerClaim',data)
+  console.log("inside hostBroadcastPlayerClaim");
+}
 function playerResponse(data) {
   io.to(data.hostId).emit('Response',data);
   console.log("Inside Player Response:"+data.resValue);
