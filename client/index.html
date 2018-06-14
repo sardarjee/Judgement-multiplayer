@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Ubuntu+Condensed" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Cormorant+Unicase" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Changa:700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="client/css/main.css">
 
 </head>
@@ -26,11 +28,11 @@
   <div id="topbar">
     <div class='inputs'>
 
-      <div class="block">
+      <div id="form" class="block">
         Enter Name: <input type="text" id="name" class="input-res" value="Rohit" required>
         <button id="crtbtn"onclick="App.CreateGame()" style="width:98%;">Create a Game</button>
-        <input type="text" id="gameID" class="input-res" value="Enter Game ID">
-        <button id="joinbtn"onclick="App.JoinGame()" style="width:35%;">Join Game</button>
+        Put GameID: <input type="text" id="gameID" class="input-res" value="">
+        <button id="joinbtn"onclick="App.JoinGame()" style="width:98%;">Join Game</button>
       </div>
 
 
@@ -46,7 +48,7 @@
 
       <div class="block">
       Enter Claim: <input id="claim" class="input-res" name="res" value="0">
-      <button onclick="App.SendClaim()" style="width:98%;">Confirm Claim</button>
+      <button onclick="App.SendClaim()" id="claimbtn"style="width:98%;">Confirm Claim</button>
       </div>
 
 
@@ -56,6 +58,21 @@
       <div class="block">
               <span id="mainTitle">Judgement</span><br>
       <button id="startGame" onclick="App.StartGame()">Start Game</button>
+      <select id='selectGame'>
+        <option value="13">13</option>
+        <option value="12">12</option>
+        <option value="11">11</option>
+        <option value="10">10</option>
+        <option value="9">9</option>
+        <option value="8">8</option>
+        <option value="7">7</option>
+        <option value="6">6</option>
+        <option value="5">5</option>
+        <option value="4">4</option>
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+      </select>
       <button id="myBtn">Scoreboard</button><br>
 
     </div>
@@ -69,7 +86,7 @@
 
     <div class='logss'>
       <div class="block">
-      <textarea id="chat" rows="15" cols="37"></textarea>
+      <textarea id="chat"></textarea>
       <input id="chatin" name="res">
     </div>
       <!-- <textarea id="Players" rows="4" cols="30"></textarea><br> -->
@@ -100,8 +117,8 @@
     <div class="modal-content">
       <span class="close">&times;</span>
 
-      <h1>Scoreboard</h1>
-<table class="rwd-table">
+      <h1>SCOREBOARD</h1>
+<table id ="scoreTable" class="rwd-table">
 <tr>
   <th>Let</th>
   <th>The</th>

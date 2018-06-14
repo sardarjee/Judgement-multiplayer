@@ -6,6 +6,7 @@ display_response=null;
 create_table=null;
 update_claim=null;
 update_hand=null;
+show_score=null;
 
 $(function(){
 
@@ -437,7 +438,7 @@ $(function(){
       res["rank"]="13"
       res["suit"]="3"
       socket.emit('playerResponse',{hostId:app.hostId,name:app.name,resValue:res,socketId:socket.id})
-      $('.card.spades.rank13').remove();
+      $('.card.hearts.rank13').remove();
       });
 
 //Diamonds
@@ -447,7 +448,7 @@ $(function(){
       $('#overlay').show();
       console.log("insidecarddiamondsrank1");
       res["rank"]="14"
-      res["suit"]="3"
+      res["suit"]="1"
       socket.emit('playerResponse',{hostId:app.hostId,name:app.name,resValue:res,socketId:socket.id})
       $('.card.diamonds.rank1').remove();
       });
@@ -633,7 +634,7 @@ $(function(){
     for(var p in data){
       var name = data[p].name
       var id  = data[p].playerNum
-    $('#pot').append('<div class="potplayers" id="'+id+'"><span>'+name+id+'</span></div>')
+    $('#pot').append('<div class="potplayers" id="'+id+'"><span>'+name+'</span></div>')
     }
   }
   function deckAppend(data) {
@@ -674,6 +675,42 @@ $(function(){
     $('#ph'+data.playerNum).empty();
     $('#ph'+data.playerNum).append(""+temp);
   }
+
+  function showScore(data) {
+    $("#scoreTable").empty()
+    var input ="<tr>";
+    for(var v in data.players){
+      input+="<th>"+data.players[v].name+"</th>";
+    }
+    input+="</tr>";
+    $("#scoreTable").append(input);
+    input="<tr>"
+    for(var v in data.score){
+      input+="<td>"+data.score[v]+"</td>";
+    }
+    input+="</tr>"
+    $("#scoreTable").append(input);
+  }
+
+  function cardAppend(data) {
+    var suit = getSuit(data.suit);
+    var rank = getRank(data.rank);
+    $('#deck').append('<div class="card '+suit+' '+rank+'"><div class="face"></div></div>');
+
+    $('.card.'+suit+'.'+rank+'').click(function () {
+    var res={}
+    $('#overlay').show();
+    console.log("insidecardheartsrank1");
+    res["rank"]=data.rank;
+    res["suit"]=data.suit;
+    socket.emit('playerResponse',{hostId:app.hostId,name:app.name,resValue:res,socketId:socket.id})
+    $('.card.'+suit+'.'+rank+'').remove();
+    });
+
+  }
+  function clearLastTurn(data) {
+    $('#'+data.id).empty();
+  }
   pot_append=potAppend;
   deck_append=deckAppend;
   get_response=getResponse;
@@ -681,6 +718,9 @@ $(function(){
   create_table=createTable;
   update_claim=updateClaim;
   update_hand=updateHand;
+  show_score=showScore;
+  clear_last_turn=clearLastTurn
+  card_append=cardAppend
 
   //Chat Stuff
 
@@ -696,21 +736,9 @@ $(function(){
   }
   });
 
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-    // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
-
-    // $("#deck").append('<div class="card spades rank9"><div class="face"></div></div>');
-
-    // $('#pot').append('<div class="potplayers"></div>')
 });
+
+setInterval(function () {
+  var textarea = document.getElementById('chat');
+  textarea.scrollTop = textarea.scrollHeight;
+},1);

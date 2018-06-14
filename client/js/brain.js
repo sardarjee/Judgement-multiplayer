@@ -11,6 +11,16 @@
         create_table(data.players);
       })
 
+      socket.on('UndoLastTurn',function (data) {
+        alert("Play a Valid Move!!");
+        card_append(data);
+      })
+
+      socket.on('ClearLastTurn',function (data) {
+        document.getElementById('msgbox').textContent="Wait for Your Turn";
+        clear_last_turn(data);
+      })
+
       socket.on('ChatData', function (data) {
         document.getElementById('chat').value+=""+data.name+" : "+data.msg+"\n";
       })
@@ -29,7 +39,8 @@
 
       socket.on('BroadcastPlayerHandWon',function (data) {
         // document.getElementById("log").value+="\n"+data.name+" Won the Hand \n"
-        document.getElementById("msgbox").textContent=data.name+" Won the Hand"
+        document.getElementById("msgbox").textContent=data.name+" Won the Hand";
+        document.getElementById("chat").value+="\n"+data.name+" Won the Hand\n\n";
         update_hand(data)
       })
 
@@ -58,6 +69,8 @@
         document.getElementById('trump').value=temp
         document.getElementById('trump').textContent="Trump for this Game is "+temp;
         document.getElementById('trump').style.display = 'block';
+        document.getElementById('form').style.display='none';
+        document.getElementById('claimTable').style.display = 'inline-table';
       })
 
       socket.on('playerClaim',function (data) {
@@ -92,6 +105,7 @@
 
       socket.on('getClaim',function (data) {
         // document.getElementById("log").value+="Enter Claim For Your Cards";
+        document.getElementById("claimbtn").disabled=false;
         document.getElementById("msgbox").textContent=" Enter Claim For Your Cards"
         app.hostId=data.hostId
       })
@@ -100,11 +114,14 @@
         // document.getElementById("log").value+="Enter Your Response";
         document.getElementById("msgbox").textContent="Its Your Turn Play!"
         document.getElementById("overlay").style.display='none';
+
         //app.hostId=data.hostId
       })
 
       socket.on('showScore',function (data) {
         console.log(data.score);
+        console.log(data.players);
+        show_score(data);
       })
 
       socket.on('showCards',function (data) {
@@ -127,7 +144,8 @@
         app.players.push(data)
         app.numberofPlayers+=1
         // document.getElementById("log").value+="\nPlayer "+data.playerName+" joined the room"
-        document.getElementById("msgbox").textContent=" "+data.playerName+" has joined the room.";
+        document.getElementById("chat").value+=data.playerName+" has joined the Match.\n";
+        document.getElementById("msgbox").textContent=" "+data.playerName+" has joined the Match.\n";
 
       })
 
@@ -184,6 +202,8 @@
             Judgement.players[game.turn].hand.addCard(res)
             console.log(Judgement.players[game.turn].name);
             console.log(Judgement.players[game.turn].hand);
+            socket.emit('hostUndoLastTurn',{socketId:Judgement.players[game.turn].id,rank:data.resValue.rank,suit:data.resValue.suit})
+            socket.emit("hostBroadcastClearLastTurn",{gameId:app.gameId,id:game.turn});
             Judgement.players[game.turn].getResponse();
             return
           }else{
@@ -213,6 +233,7 @@
     app.name=document.getElementById("name").value;
     document.getElementById('crtbtn').disabled=true;
     document.getElementById('joinbtn').disabled=true;
+    document.getElementById('selectGame').disabled=false;
     app.players.push({gameId:app.gameId,playerName:app.name,mySocketId:socket.id})
     socket.emit("hostCreateNewGame");
     console.log("inside App.CreateGame");
@@ -226,9 +247,11 @@
     socket.emit("playerJoinGame",{gameId:document.getElementById("gameID").value,mySocketId:socket.id,playerName:document.getElementById("name").value});
     app.name=document.getElementById("name").value;
     app.gameId=document.getElementById("gameID").value;
+    document.getElementById("msgbox").textContent="Wait for the Host to Start Game";
     document.getElementById('crtbtn').disabled=true;
     document.getElementById('joinbtn').disabled=true;
     document.getElementById('startGame').disabled=true;
+    document.getElementById('selectGame').style.display='none';
     console.log("inside App.JoinGame");
   }
 
@@ -236,6 +259,8 @@
     game.Addplayers(app.players)
     game.score.initScore();
     document.getElementById('startGame').disabled=true;
+    document.getElementById('selectGame').disabled=true;
+    game.gameNo=parseInt(document.getElementById('selectGame').value);
     game.startGame()
     console.log('inside App.StartGame');
   }
@@ -257,6 +282,7 @@
 
   App.SendClaim = function () {
     var claim= document.getElementById("claim").value
+    document.getElementById("claimbtn").disabled=true;
     socket.emit('playerClaim',{hostId:app.hostId,name:app.name,claimValue:claim,socketId:socket.id})
 
   }
@@ -267,42 +293,3 @@
     res["suit"]=document.getElementById("responseSuit").value
     socket.emit('playerResponse',{hostId:app.hostId,name:app.name,resValue:res,socketId:socket.id})
   }
-
-
-  /*  var socket = io();
-
-    var sendName = function() {
-      socket.emit('sendName',{
-        name:document.getElementById("text").value
-      });
-    };
-
-    var ready = function () {
-      socket.emit('ready',{
-      });
-    }
-    var response = function () {
-      socket.emit('response',{
-        rank:document.getElementById("rank").value,
-        suit:document.getElementById("suit").value,
-      });
-      console.log(document.getElementById("response").value);
-    }
-
-    socket.on('req',function (data) {
-      document.getElementById("log").value+="Its Your Turn Play!!!!"
-    })
-
-    socket.on('hand',function(data) {
-      document.getElementById("hand").value=data.hand
-    })
-
-    socket.on('players',function (names) {
-      document.getElementById("log").value="";
-      for(var i in names.name){
-        document.getElementById("log").value+="Player :"+names.name[i];
-        console.log(names.name[i]+"\n");
-      }
-    }
-  );
-  */

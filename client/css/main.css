@@ -30,6 +30,9 @@ body {
   margin: 0px;
   width: 100%;
   background-color: #ddd;
+  font-family: 'Arimo', sans-serif;
+  font-size: 15px;
+  height: 220px ;
 }
 
 #chatin{
@@ -37,15 +40,24 @@ body {
   height: 30px;
   margin: 0px;
   background-color: #ddd;
+  font-size: 15px;
+  font-family: 'Arimo', sans-serif;
 }
 
 #claimTable{
   /* position: relative; */
+  display: none;
   background: none;
   width:100%;
   border: 1px solid #fff;
   font-size: 20px;
   padding: 0.01rem;
+  text-align: center;
+}
+
+#claimTable tr{
+    text-align: center;
+    width: 100%;
 }
 #mainTitle{
   font-family: 'Cormorant Unicase', serif;
@@ -71,22 +83,24 @@ body {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
 }
 .modal-content h1{
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Changa', sans-serif;
   color: white;
   text-align: center;
-  padding: 5px 5px 5px 5px;
+  padding: 4px 4px 4px 4px;
+  background-color: #0000;
+  font-size: 60px;
 }
 
 /* Modal Content/Box */
 .modal-content {
-    /* background-color: #9999; */
+    background-color: #111;
     color: black;
     margin: 10% auto;
-    padding: 20px;
-    /* border: 2px solid #111; */
+    padding: 10px;
+    border: 2px solid;
     width: 60%; /* Could be more or less, depending on screen size */
 
 
@@ -145,7 +159,7 @@ opacity: 1;
   }
 }
 .rwd-table th, .rwd-table td {
-  text-align: left;
+  text-align: center;
 }
 @media (min-width: 480px) {
   .rwd-table th, .rwd-table td {
@@ -273,11 +287,7 @@ margin-left: 50%;
   margin-right: auto;
   width:40%;
   margin-bottom: 30px;
-  /* -webkit-transform: translate3d(-50%, -50%, 0);
-  -moz-transform: translate3d(-50%, -50%, 0);
-  -o-transform: translate3d(-50%, -50%, 0);
-  -ms-transform: translate3d(-50%, -50%, 0);
-  transform: translate3d(-50%, -50%, 0); */
+
 }
 #topbar {
   position: fixed;
@@ -286,7 +296,7 @@ margin-left: 50%;
   width: 100%;
   background-color: #1111;
   padding: 0.25rem;
-  /* text-align: center; */
+
   opacity: 1
 }
 #topbar button {
@@ -305,12 +315,32 @@ margin-left: 50%;
   background-color: #fff;
   color: #444;
 }
+
+#selectGame {
+  background: none;
+  border: 1px solid #fff;
+  outline: none;
+  margin: 0.1rem;
+  padding: 0.4rem;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+}
+
+#selectGame:hover{
+  background-color: #fff;
+  color: #444;
+}
 .potplayers{
   position:relative;
   display: inline-block;
-  width: 3.975rem;
-  height: 5.9rem;
-  background-color: #fff;
+  width: 4.3rem;
+  padding: 3px;
+  height: 6.1rem;
+  background-color: #ddd;
+  overflow: hidden;
   margin: 10px;
   color: black;
   -webkit-border-radius: 4px;

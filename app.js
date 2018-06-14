@@ -23,6 +23,8 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostBroadcastRoundNum',hostBroadcastRoundNum);
     gameSocket.on('hostBroadcastMatchWinner',hostBroadcastMatchWinner);
     gameSocket.on('BroadcastChatData',BroadcastChatData);
+    gameSocket.on('hostUndoLastTurn', hostUndoLastTurn);
+    gameSocket.on('hostBroadcastClearLastTurn',hostBroadcastClearLastTurn);
     //gameSocket.on('hostRoomFull', hostPrepareGame);
     //gameSocket.on('hostCountdownFinished', hostStartGame);
     //gameSocket.on('hostNextRound', hostNextRound);
@@ -33,6 +35,14 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerResponse', playerResponse);
     //gameSocket.on('playerAnswer', playerAnswer);
     //gameSocket.on('playerRestart', playerRestart);
+}
+
+function hostBroadcastClearLastTurn(data) {
+  io.sockets.in(data.gameId).emit("ClearLastTurn",data);
+}
+
+function hostUndoLastTurn(data) {
+  io.to(data.socketId).emit('UndoLastTurn',data);
 }
 
 function BroadcastChatData(data) {
@@ -89,7 +99,7 @@ function hostGetClaim(data) {
 
 }
 function hostShowScore(data) {
-    io.sockets.in(data.gameId).emit('showScore',{score:data.score});
+    io.sockets.in(data.gameId).emit('showScore',data);
 }
 
 function hostShowTrump(data) {
