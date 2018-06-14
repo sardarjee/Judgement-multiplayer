@@ -9,7 +9,7 @@ exports.initGame = function(sio, socket){
 
     // Host Events
     gameSocket.on('hostCreateNewGame', hostCreateNewGame);
-    gameSocket.on('activePlayers', activePlayers);
+    // gameSocket.on('activePlayers', activePlayers);
     gameSocket.on('hostShowCards', hostShowCards);
     gameSocket.on('hostShowTrump', hostShowTrump);
     gameSocket.on('hostShowScore', hostShowScore);
@@ -110,9 +110,9 @@ function hostShowCards(data) {
   io.to(data.socketId).emit('showCards',data);
 }
 
-function activePlayers(data) {
-    io.sockets.in(data.gameId).emit('showActivePlayers',{players:data.players})
-}
+// function activePlayers(data) {
+//     io.sockets.in(data.gameId).emit('showActivePlayers',{players:data.players})
+// }
 
 function hostCreateNewGame() {
     // Create a unique Socket.IO Room

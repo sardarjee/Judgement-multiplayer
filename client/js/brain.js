@@ -149,12 +149,12 @@
 
       })
 
-      socket.on('showActivePlayers',function (data) {
-        // document.getElementById("Players").value=""
-        // app.players=data.players;
-        // for(var i in data.players)
-          // document.getElementById("Players").value+="\n"+data.players[i].playerName
-      })
+      // socket.on('showActivePlayers',function (data) {
+      //   // document.getElementById("Players").value=""
+      //   // app.players=data.players;
+      //   // for(var i in data.players)
+      //     // document.getElementById("Players").value+="\n"+data.players[i].playerName
+      // })
 
     }
 
