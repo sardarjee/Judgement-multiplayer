@@ -22,6 +22,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on("hostBroadcastGameNum",hostBroadcastGameNum);
     gameSocket.on('hostBroadcastRoundNum',hostBroadcastRoundNum);
     gameSocket.on('hostBroadcastMatchWinner',hostBroadcastMatchWinner);
+    gameSocket.on('BroadcastChatData',BroadcastChatData);
     //gameSocket.on('hostRoomFull', hostPrepareGame);
     //gameSocket.on('hostCountdownFinished', hostStartGame);
     //gameSocket.on('hostNextRound', hostNextRound);
@@ -33,6 +34,12 @@ exports.initGame = function(sio, socket){
     //gameSocket.on('playerAnswer', playerAnswer);
     //gameSocket.on('playerRestart', playerRestart);
 }
+
+function BroadcastChatData(data) {
+  console.log("inside BroadcastChatData");
+  io.sockets.in(data.gameId).emit('ChatData',data);
+}
+
 function hostBroadcastMatchWinner(data) {
   console.log("inside hostBroadcastMatchWinner");
   io.sockets.in(data.gameId).emit('BroadcastMatchWinner',data)

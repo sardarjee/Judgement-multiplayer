@@ -1,5 +1,4 @@
 
-var carv = ['12','11'];
 pot_append = null;
 deck_append = null;
 get_response=null;
@@ -682,6 +681,21 @@ $(function(){
   create_table=createTable;
   update_claim=updateClaim;
   update_hand=updateHand;
+
+  //Chat Stuff
+
+  $('#chatin').bind("enterKey",function(e){
+  var data =   $('#chatin').val();
+  $('#chatin').val("");
+  socket.emit('BroadcastChatData',{gameId:app.gameId,name:app.name,msg:data});
+  });
+  $('#chatin').keyup(function(e){
+  if(e.keyCode == 13)
+  {
+    $(this).trigger("enterKey");
+  }
+  });
+
     // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
     // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');
     // $("#deck").append('<div class="card spades rank8"><div class="face"></div></div>');

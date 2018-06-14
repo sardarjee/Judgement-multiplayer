@@ -11,6 +11,10 @@
         create_table(data.players);
       })
 
+      socket.on('ChatData', function (data) {
+        document.getElementById('chat').value+=""+data.name+" : "+data.msg+"\n";
+      })
+
       socket.on('BroadcastGameNum',function (data) {
         document.getElementById('gameNo').textContent="Game Number is : "+String(data.gameNo);
       })
@@ -24,20 +28,20 @@
       })
 
       socket.on('BroadcastPlayerHandWon',function (data) {
-        document.getElementById("log").value+="\n"+data.name+" Won the Hand \n"
+        // document.getElementById("log").value+="\n"+data.name+" Won the Hand \n"
         document.getElementById("msgbox").textContent=data.name+" Won the Hand"
         update_hand(data)
       })
 
       socket.on('BroadcastPlayerClaim',function (data) {
-        document.getElementById("log").value+="\nClaim of Player "+data.name+" is "+data.claim+"\n"
+        // document.getElementById("log").value+="\nClaim of Player "+data.name+" is "+data.claim+"\n"
         document.getElementById("msgbox").textContent=" "+data.name+" has Claimed "+data.claim+" hands."
         update_claim(data);
       })
 
       socket.on('BroadcastPlayerResponse',function (data) {
         display_response(data)
-        document.getElementById("log").value+="\nResponse of Player "+data.name+" is "+data.res.rank+data.res.suit+"\n"
+        // document.getElementById("log").value+="\nResponse of Player "+data.name+" is "+data.res.rank+data.res.suit+"\n"
         document.getElementById("msgbox").textContent=" "+data.name+" played "+data.res.rank+" of "+data.res.suit;
       })
 
@@ -87,13 +91,13 @@
       })
 
       socket.on('getClaim',function (data) {
-        document.getElementById("log").value+="Enter Claim For Your Cards";
+        // document.getElementById("log").value+="Enter Claim For Your Cards";
         document.getElementById("msgbox").textContent=" Enter Claim For Your Cards"
         app.hostId=data.hostId
       })
 
       socket.on('getResponse',function (data) {
-        document.getElementById("log").value+="Enter Your Response";
+        // document.getElementById("log").value+="Enter Your Response";
         document.getElementById("msgbox").textContent="Its Your Turn Play!"
         document.getElementById("overlay").style.display='none';
         //app.hostId=data.hostId
@@ -122,16 +126,16 @@
       socket.on('playerJoinedRoom',function (data) {
         app.players.push(data)
         app.numberofPlayers+=1
-        document.getElementById("log").value+="\nPlayer "+data.playerName+" joined the room"
+        // document.getElementById("log").value+="\nPlayer "+data.playerName+" joined the room"
         document.getElementById("msgbox").textContent=" "+data.playerName+" has joined the room.";
 
       })
 
       socket.on('showActivePlayers',function (data) {
-        document.getElementById("Players").value=""
-        app.players=data.players;
-        for(var i in data.players)
-          document.getElementById("Players").value+="\n"+data.players[i].playerName
+        // document.getElementById("Players").value=""
+        // app.players=data.players;
+        // for(var i in data.players)
+          // document.getElementById("Players").value+="\n"+data.players[i].playerName
       })
 
     }
@@ -159,7 +163,7 @@
       this.socketid=data.mySocketId;
       this.numberofPlayers=1;
 
-      document.getElementById("log").value+=" GameID "+data.gameId
+      // document.getElementById("log").value+=" GameID "+data.gameId
       document.getElementById("msgbox").textContent="Your Game ID is: "+data.gameId;
       document.getElementById("gameID").value="GameId is "+data.gameId
 
@@ -221,6 +225,7 @@
   App.JoinGame = function () {
     socket.emit("playerJoinGame",{gameId:document.getElementById("gameID").value,mySocketId:socket.id,playerName:document.getElementById("name").value});
     app.name=document.getElementById("name").value;
+    app.gameId=document.getElementById("gameID").value;
     document.getElementById('crtbtn').disabled=true;
     document.getElementById('joinbtn').disabled=true;
     document.getElementById('startGame').disabled=true;
@@ -244,7 +249,7 @@
   App.showCards = function (data) {
     var temp = new Hand();
     temp.hand=data.hand
-    document.getElementById("log").value+=temp.showHand()
+    // document.getElementById("log").value+=temp.showHand()
     //document.getElementById("trump").value=
     console.log(temp.showHand())
 

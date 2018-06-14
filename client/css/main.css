@@ -25,6 +25,20 @@ body {
   text-size-adjust: 100%;
 }
 
+#chat{
+  resize: none;
+  margin: 0px;
+  width: 100%;
+  background-color: #ddd;
+}
+
+#chatin{
+  width: 100%;
+  height: 30px;
+  margin: 0px;
+  background-color: #ddd;
+}
+
 #claimTable{
   /* position: relative; */
   background: none;
