@@ -182,7 +182,7 @@
       this.numberofPlayers=1;
 
       // document.getElementById("log").value+=" GameID "+data.gameId
-      document.getElementById("msgbox").textContent="Your Game ID is: "+data.gameId;
+      document.getElementById("msgbox").textContent=data.gameId;
       document.getElementById("gameID").value="GameId is "+data.gameId
 
     }
