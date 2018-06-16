@@ -183,7 +183,7 @@
 
       // document.getElementById("log").value+=" GameID "+data.gameId
       document.getElementById("msgbox").textContent=data.gameId;
-      document.getElementById("gameID").value="GameId is "+data.gameId
+      document.getElementById("gameID").value=data.gameId
 
     }
 
