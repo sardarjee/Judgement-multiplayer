@@ -27,16 +27,12 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostBroadcastClearLastTurn',hostBroadcastClearLastTurn);
     gameSocket.on('hostBroadcastClearPot',hostBroadcastClearPot);
     gameSocket.on('hostValidClaim',hostValidClaim);
-    //gameSocket.on('hostRoomFull', hostPrepareGame);
-    //gameSocket.on('hostCountdownFinished', hostStartGame);
-    //gameSocket.on('hostNextRound', hostNextRound);
+
 
     // Player Eventssss
     gameSocket.on('playerJoinGame', playerJoinGame);
     gameSocket.on('playerClaim', playerClaim);
     gameSocket.on('playerResponse', playerResponse);
-    //gameSocket.on('playerAnswer', playerAnswer);
-    //gameSocket.on('playerRestart', playerRestart);
 }
 
 function hostValidClaim(data) {

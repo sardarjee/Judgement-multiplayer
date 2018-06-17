@@ -18,23 +18,6 @@ var Player = function(iden,name){
 
     this.getResponse = function() {
       socket.emit('hostGetResponse',{gameId:app.gameId,hostId:app.socketid,socketId:this.id})
-      // var res={}
-      // this.socket.emit('req',{data:"Hello"})
-      // console.log(this.name);
-      //
-      // if(this.respond==false){
-      //   this.socket.on('response', function (data) {
-      //       //Player.response.push({this.id,String(data.response)})
-      //       res=data
-      //       console.log("Response :  "+res);
-      //       this.respond=true
-      //   });
-      // }
-      // return new Promise(resolve => {
-      //   setTimeout(() => {
-      //        resolve(res);
-      //      }, 26000);
-      // });
 }
     this.play =  function(input) {
       var card=Card(input["rank"],input["suit"])

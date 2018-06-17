@@ -317,8 +317,6 @@
   App.showCards = function (data) {
     var temp = new Hand();
     temp.hand=data.hand
-    // document.getElementById("log").value+=temp.showHand()
-    //document.getElementById("trump").value=
     console.log(temp.showHand())
 
   }
