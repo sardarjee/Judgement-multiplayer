@@ -78,6 +78,7 @@
         document.getElementById('trump').textContent="Trump for this Game is "+temp;
         document.getElementById('trump').style.display = 'block';
         document.getElementById('form').style.display='none';
+        document.getElementById('claimTableHead').style.display = 'block';
         document.getElementById('claimTable').style.display = 'inline-table';
       })
 
