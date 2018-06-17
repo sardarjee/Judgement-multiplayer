@@ -738,10 +738,15 @@ $(function(){
 
 });
 
+
+
+
 //chat box feature
 setInterval(function () {
   var textarea = document.getElementById('chat');
   textarea.scrollTop = textarea.scrollHeight;
+
+
 },1);
 
 

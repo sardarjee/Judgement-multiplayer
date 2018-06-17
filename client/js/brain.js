@@ -143,6 +143,38 @@
       socket.on('playerJoinedRoom',function (data) {
         app.players.push(data)
         app.numberofPlayers+=1
+        switch (app.players.length) {
+          case 5:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+          case 6:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+          case 7:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+          case 8:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+          case 9:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+          case 10:{
+            $('#selectGame').empty();
+            $('#selectGame').append('<option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>');
+                break;
+          }
+        }
         // document.getElementById("log").value+="\nPlayer "+data.playerName+" joined the room"
         document.getElementById("chat").value+=data.playerName+" has joined the Match.\n";
         document.getElementById("msgbox").textContent=" "+data.playerName+" has joined the Match.\n";
