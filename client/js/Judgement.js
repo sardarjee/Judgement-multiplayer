@@ -54,7 +54,6 @@ function Judgement() {
        cardsDealt=cardsDealt-1
    }
    this.showCards();
-   //socket.emit("hostShowCards",{gameId:app.gameId});
  }
 
  this.showCards = function () {
@@ -72,28 +71,11 @@ function Judgement() {
    socket.emit('hostShowScore',{gameId:app.gameId,score:this.score.score,players:Judgement.players})
  }
 
- // this.Show = function() {
- //   for(var p in Judgement.players){
- //     //sockets
- //     Judgement.players[p].socket.emit('hand',{
- //       hand:Judgement.players[p].hand.showHand()
- //     })
- //   console.log(Judgement.players[p].name+String(Judgement.players[p].playerNum)+":");
- //   console.log(Judgement.players[p].hand.showHand());
- //   console.log("The trump is "+String(this.trump)+"\n0: clubs\n1: diamonds\n2: spades\n3: hearts");
- //   this.score.showScore()
- //   }
- // }
 
 
  this.getClaim = function() {
    for(var i in Judgement.players)
            this.claim.push(0);
-
-   // for(var i=1;i<Judgement.players.length+1;i++)
-   //     claim[(this.dealer + i) % Judgement.players.length] = 0//Judgement.players[(this.dealer + i) % Judgement.players.length].getClaim()//Socket get claim//raw_input("Enter Cliam for "+str(self.players[(self.dealer + i) % len(self.players)].name)+str((self.dealer + i) % len(self.players))+" ")
-   // return claim
-   //this.turn=(this.dealer + 1) % Judgement.players.length
    Judgement.players[this.turn].getClaim()
  }
 
@@ -115,44 +97,7 @@ function Judgement() {
    }, 3000);
 
 }
- //   for(var i=0;i<Judgement.players.length;i++){
- //       while(true){
- //           var input = await Judgement.players[(this.startplayer + i) % Judgement.players.length].getResponse();
- //           console.log("after get Response");
- //           var res = Judgement.players[(this.startplayer + i) % Judgement.players.length].play(input);
- //           if(i==0){
- //               suit=res.suit.string
- //               round.splice(0,0,[res,Judgement.players[(this.startplayer + i) % Judgement.players.length].playerNum])
- //               break
- //           }
- //           if(res.suit.string==suit){
- //               round.splice(0,0,[res,Judgement.players[(this.startplayer + i) % Judgement.players.length].playerNum])//inset at o
- //               break
- //           }
- //           else{
- //
- //               if(Judgement.players[(this.startplayer + i) % Judgement.players.length].hand.hasCardofSuit(suit)){
- //                   console.log("play the right move!");
- //                   Judgement.players[(this.startplayer + i) % Judgement.players.length].hand.addCard(res)
- //                   console.log(Judgement.players[(this.startplayer + i) % Judgement.players.length].name);
- //                   console.log(Judgement.players[(this.startplayer + i) % Judgement.players.length].hand);
- //                   continue
- //                 }
- //               else{
- //                   round.splice(0,0,[res,Judgement.players[(this.startplayer + i) % Judgement.players.length].playerNum])
- //                   break
- //               }
- //           }
- //         }
- //   }
- //   var win =this.getWinner(round,suit)
- //   return new Promise(resolve=> {
- //     setTimeout(() => {
- //     resolve(win)
- //     }, 10);
- //   });
- // }
- //
+
  this.getWinner = function () {
    console.log("Inside Get Winner:"+this.lsuit);
    for(var i in this.round)
