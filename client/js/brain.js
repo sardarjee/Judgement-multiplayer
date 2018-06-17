@@ -288,20 +288,24 @@
   }
 
   App.StartGame = function () {
+    if(app.players.length>1){
     game.Addplayers(app.players)
     game.score.initScore();
     document.getElementById('startGame').disabled=true;
     document.getElementById('selectGame').disabled=true;
     game.gameNo=parseInt(document.getElementById('selectGame').value);
     game.startGame()
+  }else {
+    alert("Wait for other Players to join");
+  }
     console.log('inside App.StartGame');
   }
 
-  App.displayPlayers = function () {
-    // for(var p in app.players){
-    //   document.getElementById('pot').innerHTML+='<div class="potplayers"></div>'
-    // }
-  }
+  // App.displayPlayers = function () {
+  //   // for(var p in app.players){
+  //   //   document.getElementById('pot').innerHTML+='<div class="potplayers"></div>'
+  //   // }
+  // }
 
   App.showCards = function (data) {
     var temp = new Hand();
