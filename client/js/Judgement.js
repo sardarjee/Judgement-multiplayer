@@ -2,8 +2,6 @@ function Judgement() {
  this.dealer = -1
  this.startplayer = -1
  this.deck = new Deck();
- //self.players = [Player("Danny",0), Player("Desmond",1), Player("Ben",2), Player("Tyler",3)]
- //self.players = [Player("Danny",0), Player("Desmond",1)]
  this.score = new Scoreboard()
  this.trump = Math.floor(Math.random() * Math.floor(4))
  this.round = []
@@ -90,7 +88,7 @@ function Judgement() {
 
  this.getClaim = function() {
    for(var i in Judgement.players)
-           this.claim.push(-1);
+           this.claim.push(0);
 
    // for(var i=1;i<Judgement.players.length+1;i++)
    //     claim[(this.dealer + i) % Judgement.players.length] = 0//Judgement.players[(this.dealer + i) % Judgement.players.length].getClaim()//Socket get claim//raw_input("Enter Cliam for "+str(self.players[(self.dealer + i) % len(self.players)].name)+str((self.dealer + i) % len(self.players))+" ")

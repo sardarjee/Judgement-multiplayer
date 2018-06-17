@@ -6,6 +6,10 @@
               console.log(data.message);
       })
 
+      socket.on('ValidClaim',function () {
+        alert("Enter Valid Claim");
+      })
+
       socket.on('DisplayPlayers',function (data) {
         pot_append(data.players);
         create_table(data.players);
@@ -85,9 +89,13 @@
           game.turn=(game.turn+1)%Judgement.players.length;
           Judgement.players[game.turn].getClaim()
       }else{
-        var Sum=game.claimSum()
-        if(Sum+parseInt(data.claimValue)==game.gameNo)
+        var Sum=game.claimSum();
+        console.log("Sum="+Sum);
+        if(Sum+parseInt(data.claimValue)==game.gameNo){
+          socket.emit("hostValidClaim",{socketId:Judgement.players[game.turn].id})
           Judgement.players[game.turn].getClaim()
+
+        }
         else {
           game.claim[game.turn]=parseInt(data.claimValue)
           socket.emit('hostBroadcastPlayerClaim',{gameId:app.gameId,playerNum:game.turn,name:data.name,claim:data.claimValue})

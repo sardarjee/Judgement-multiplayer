@@ -26,6 +26,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostUndoLastTurn', hostUndoLastTurn);
     gameSocket.on('hostBroadcastClearLastTurn',hostBroadcastClearLastTurn);
     gameSocket.on('hostBroadcastClearPot',hostBroadcastClearPot);
+    gameSocket.on('hostValidClaim',hostValidClaim);
     //gameSocket.on('hostRoomFull', hostPrepareGame);
     //gameSocket.on('hostCountdownFinished', hostStartGame);
     //gameSocket.on('hostNextRound', hostNextRound);
@@ -36,6 +37,10 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerResponse', playerResponse);
     //gameSocket.on('playerAnswer', playerAnswer);
     //gameSocket.on('playerRestart', playerRestart);
+}
+
+function hostValidClaim(data) {
+  io.to(data.socketId).emit('ValidClaim');
 }
 
 function hostBroadcastClearPot(data) {
