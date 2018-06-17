@@ -111,7 +111,11 @@ function Judgement() {
    this.round = []
    this.lsuit = ""
    socket.emit('hostBroadcastRoundNum',{gameId:app.gameId,roundNo:this.roundCount+1});
-   Judgement.players[this.startplayer].getResponse();
+   setTimeout(function () {
+    socket.emit('hostBroadcastClearPot',{gameId:app.gameId,players:Judgement.players});
+    Judgement.players[game.startplayer].getResponse();
+   }, 3000);
+
 }
  //   for(var i=0;i<Judgement.players.length;i++){
  //       while(true){
@@ -222,7 +226,7 @@ function Judgement() {
           this.showScore()
           setTimeout(function () {
             game.newGame();
-          },1000);
+          },2000);
 
 
         }

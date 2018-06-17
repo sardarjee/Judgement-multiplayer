@@ -711,6 +711,16 @@ $(function(){
   function clearLastTurn(data) {
     $('#'+data.id).empty();
   }
+
+  function clearPot(data) {
+    var i=0;
+    for(var p in data.players){
+      //$('#'+i).empty();
+      console.log("clearPot "+i);
+      document.getElementById(i).innerHTML = "<span>"+data.players[p].name+"</span>";
+      i+=1;
+    }
+  }
   pot_append=potAppend;
   deck_append=deckAppend;
   get_response=getResponse;
@@ -721,7 +731,7 @@ $(function(){
   show_score=showScore;
   clear_last_turn=clearLastTurn
   card_append=cardAppend
-
+  clear_pot=clearPot;
   //Chat Stuff
 
   $('#chatin').bind("enterKey",function(e){
@@ -745,8 +755,6 @@ $(function(){
 setInterval(function () {
   var textarea = document.getElementById('chat');
   textarea.scrollTop = textarea.scrollHeight;
-
-
 },1);
 
 

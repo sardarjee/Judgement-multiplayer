@@ -11,6 +11,10 @@
         create_table(data.players);
       })
 
+      socket.on('BroadcastClearPot',function (data) {
+        clear_pot(data);
+      })
+
       socket.on('UndoLastTurn',function (data) {
         alert("Play a Valid Move!!");
         card_append(data);
@@ -142,6 +146,7 @@
 
       socket.on('playerJoinedRoom',function (data) {
         app.players.push(data)
+        socket.emit('activePlayers',{gameId:app.gameId,players:app.players});
         app.numberofPlayers+=1
         switch (app.players.length) {
           case 5:{
@@ -181,12 +186,6 @@
 
       })
 
-      // socket.on('showActivePlayers',function (data) {
-      //   // document.getElementById("Players").value=""
-      //   // app.players=data.players;
-      //   // for(var i in data.players)
-      //     // document.getElementById("Players").value+="\n"+data.players[i].playerName
-      // })
 
     }
 
