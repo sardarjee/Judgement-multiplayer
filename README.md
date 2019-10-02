@@ -1,3 +1,3 @@
 # Judgement-multiplayer
 
-This is an online multiplayer card game.
+// This is an online multiplayer card game.
